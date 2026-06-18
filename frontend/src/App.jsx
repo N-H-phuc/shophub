@@ -1,16 +1,32 @@
+import { useState } from "react";
+
 import Header from "./components/Header";
 import Banner from "./components/Banner";
-import FeatureSection from "./components/FeatureSection";
 import Footer from "./components/Footer";
 
-const App = () => {
+import ProductList from "./components/ProductList";
+import ProductDetail from "./components/ProductDetail";
+
+import UserList from "./components/UserList";
+import UserDetail from "./components/UserDetail";
+
+function App() {
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
   return (
     <>
       <Header title="ShopHub" />
 
-      <Banner subtitle="Welcome to ShopHub" buttonText="Shop Now" />
+      <Banner subtitle="Welcome to our store" buttonText="Shop Now" />
 
-      <FeatureSection />
+      <ProductList onSelectProduct={setSelectedProductId} />
+
+      <ProductDetail productId={selectedProductId} />
+
+      <UserList onSelectUser={setSelectedUserId} />
+
+      <UserDetail userId={selectedUserId} />
 
       <Footer
         studentName="Nguyen Hoang Phuc"
@@ -18,6 +34,6 @@ const App = () => {
       />
     </>
   );
-};
+}
 
 export default App;
