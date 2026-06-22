@@ -19,3 +19,5 @@ Session 2: Landing Page
 Session 3: Product Catalog UI
 
 Session 4: Search & Filter
+
+Session 5: Multi-Page Application
