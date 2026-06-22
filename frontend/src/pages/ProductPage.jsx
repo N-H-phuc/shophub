@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductList from "../components/ProductList";
 
-function ProductPage({ onSelectProduct }) {
+function ProductPage() {
   const [products, setProducts] = useState([]);
 
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -149,7 +149,7 @@ function ProductPage({ onSelectProduct }) {
 
       <ProductList
         products={filteredProducts}
-        onSelectProduct={onSelectProduct}
+        // onSelectProduct={onSelectProduct}
       />
     </div>
   );

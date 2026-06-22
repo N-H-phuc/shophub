@@ -57,7 +57,7 @@
 
 import ProductCard from "./ProductCard";
 
-const ProductList = ({ products, onSelectProduct }) => {
+const ProductList = ({ products }) => {
   if (products.length === 0) {
     return <h3>No products found</h3>;
   }
@@ -73,12 +73,19 @@ const ProductList = ({ products, onSelectProduct }) => {
       >
         {products.map((product) => (
           <ProductCard
+            // key={product.id}
+            // title={product.name}
+            // price={product.price}
+            // category={product.category}
+            // image={product.imageUrl}
+            // onViewDetail={() => onSelectProduct && onSelectProduct(product.id)}
             key={product.id}
-            title={product.name}
+            id={product.id}
+            name={product.name}
             price={product.price}
             category={product.category}
-            image={product.imageUrl}
-            onViewDetail={() => onSelectProduct && onSelectProduct(product.id)}
+            imageUrl={product.imageUrl}
+            description={product.description}
           />
         ))}
       </div>

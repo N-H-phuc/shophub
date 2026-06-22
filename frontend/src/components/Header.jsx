@@ -1,5 +1,25 @@
+import { NavLink } from "react-router-dom";
+
 const Header = ({ title }) => {
-  const navItems = ["Home", "Products", "Cart", "Login"];
+  const navItems = [
+    { label: "Home", to: "/" },
+
+    { label: "Products", to: "/products" },
+
+    { label: "Cart", to: "/cart" },
+
+    { label: "Login", to: "/login" },
+  ];
+
+  const linkStyle = ({ isActive }) => ({
+    marginLeft: "15px",
+
+    textDecoration: "none",
+
+    color: isActive ? "#1976d2" : "#555",
+
+    fontWeight: isActive ? "bold" : "normal",
+  });
 
   return (
     <header
@@ -11,21 +31,13 @@ const Header = ({ title }) => {
         borderBottom: "1px solid #ddd",
       }}
     >
-      <h1 style={{ margin: 0, fontSize: "60px" }}>{title}</h1>
+      <h1 style={{ margin: 0 }}>{title}</h1>
 
       <nav>
         {navItems.map((item) => (
-          <a
-            key={item}
-            href="#"
-            style={{
-              marginLeft: "15px",
-              textDecoration: "none",
-              color: "#4d73d4",
-            }}
-          >
-            {item}
-          </a>
+          <NavLink key={item.to} to={item.to} style={linkStyle}>
+            {item.label}
+          </NavLink>
         ))}
       </nav>
     </header>
