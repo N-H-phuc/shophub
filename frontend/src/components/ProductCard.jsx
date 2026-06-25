@@ -13,7 +13,7 @@ const ProductCard = ({ id, name, price, category, imageUrl, description }) => {
       }}
     >
       <img
-        src={imageUrl}
+        src={`http://127.0.0.1:8000${imageUrl}`}
         alt={name}
         style={{
           width: "100%",

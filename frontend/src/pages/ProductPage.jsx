@@ -21,9 +21,9 @@ function ProductPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("https://fakestoreapi.com/products");
+        const res = await axios.get("http://127.0.0.1:8000/products");
 
-        const data = res.data.map((item) => ({
+        const data = res.data.items.map((item) => ({
           id: item.id,
 
           name: item.title,
@@ -37,9 +37,9 @@ function ProductPage() {
           description: item.description,
         }));
 
-        setProducts(data);
+        setProducts(res.data.items);
 
-        setFilteredProducts(data);
+        setFilteredProducts(res.data.items);
       } catch (err) {
         setError("Load product failed");
       } finally {

@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "Laptop",
+        "price": 1200,
+        "category": "Electronics",
+        "description": "Gaming laptop",
+        "imageUrl": "/images/laptop.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Mouse",
+        "price": 30,
+        "category": "Accessories",
+        "description": "Wireless mouse",
+        "imageUrl": "/images/mouse.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Keyboard",
+        "price": 80,
+        "category": "Accessories",
+        "description": "Mechanical keyboard",
+        "imageUrl": "/images/keyboard.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Monitor",
+        "price": 350,
+        "category": "Electronics",
+        "description": "27 inch 2K monitor",
+        "imageUrl": "/images/monitor-man-hinh-27b1n3800-00.webp"
+    },
+    {
+        "id": 5,
+        "name": "iPhone",
+        "price": 999,
+        "category": "Electronics",
+        "description": "iPhone 15",
+        "imageUrl": "/images/iphone-17e.jpg"
+    }
+]
