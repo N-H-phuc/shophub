@@ -23,3 +23,5 @@ Session 4: Search & Filter
 Session 5: Multi-Page Application
 
 Session 6 – FastAPI Product API
+
+Session 07 – Integrating React with APIs (Assignment)
