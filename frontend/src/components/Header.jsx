@@ -1,23 +1,25 @@
 import { NavLink } from "react-router-dom";
 
 const Header = ({ title }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.location.href = "/login";
+  };
+
   const navItems = [
     { label: "Home", to: "/" },
-
     { label: "Products", to: "/products" },
-
     { label: "Cart", to: "/cart" },
-
-    { label: "Login", to: "/login" },
   ];
 
   const linkStyle = ({ isActive }) => ({
     marginLeft: "15px",
-
     textDecoration: "none",
-
     color: isActive ? "#1976d2" : "#555",
-
     fontWeight: isActive ? "bold" : "normal",
   });
 
@@ -39,6 +41,40 @@ const Header = ({ title }) => {
             {item.label}
           </NavLink>
         ))}
+
+        {/* Chỉ Admin mới thấy menu Users */}
+        {user?.role === "admin" && (
+          <NavLink to="/users" style={linkStyle}>
+            Users
+          </NavLink>
+        )}
+
+        {!user ? (
+          <NavLink to="/login" style={linkStyle}>
+            Login
+          </NavLink>
+        ) : (
+          <>
+            <span
+              style={{
+                marginLeft: "20px",
+                fontWeight: "bold",
+              }}
+            >
+              Hello, {user.full_name}
+            </span>
+
+            <button
+              onClick={handleLogout}
+              style={{
+                marginLeft: "15px",
+                cursor: "pointer",
+              }}
+            >
+              Logout
+            </button>
+          </>
+        )}
       </nav>
     </header>
   );

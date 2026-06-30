@@ -1,11 +1,27 @@
+// ==========================
+// IMPORT
+// ==========================
+
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import { productsApi } from "../api/productsApi";
 import ProductList from "../components/ProductList";
+import ProductForm from "../components/ProductForm";
 
 function ProductPage() {
+  // ==========================
+  // STATE LƯU DỮ LIỆU PRODUCT
+  // ==========================
+
   const [products, setProducts] = useState([]);
 
+  // Danh sách sau khi search/filter/sort
   const [filteredProducts, setFilteredProducts] = useState([]);
+
+  // ==========================
+  // STATE SEARCH / FILTER / SORT
+  // ==========================
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -13,43 +29,67 @@ function ProductPage() {
 
   const [sortOption, setSortOption] = useState("none");
 
+  // ==========================
+  // STATE CHO EDIT PRODUCT
+  // ==========================
+  // Nếu null => đang thêm mới
+  // Nếu có object => đang sửa sản phẩm
+
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  // ==========================
+  // STATE LOADING + ERROR
+  // ==========================
+
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
 
-  // FETCH API
+  // ==========================
+  // GET ALL PRODUCTS
+  // ==========================
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+
+      const data = await productsApi.getAll();
+
+      // API trả:
+      // {
+      //    items: []
+      // }
+
+      const list = data.items || data || [];
+
+      setProducts(list);
+
+      setFilteredProducts(list);
+    } catch (err) {
+      setError("Load products failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ==========================
+  // CHẠY 1 LẦN KHI VÀO PAGE
+  // ==========================
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await productsApi.getAll();
-
-        const mappedProducts = data.items.map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          category: item.category,
-          description: item.description,
-          imageUrl: item.imageUrl,
-        }));
-
-        setProducts(mappedProducts);
-        setFilteredProducts(mappedProducts);
-      } catch (err) {
-        setError("Load product failed");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
 
+  // ==========================
   // SEARCH + FILTER + SORT
+  // ==========================
 
   useEffect(() => {
     let result = [...products];
 
-    // search
+    // ======================
+    // SEARCH THEO NAME
+    // ======================
 
     if (searchTerm.trim() !== "") {
       result = result.filter((product) =>
@@ -57,7 +97,9 @@ function ProductPage() {
       );
     }
 
-    // category
+    // ======================
+    // FILTER CATEGORY
+    // ======================
 
     if (selectedCategory !== "All") {
       result = result.filter(
@@ -65,7 +107,9 @@ function ProductPage() {
       );
     }
 
-    // sort
+    // ======================
+    // SORT PRICE
+    // ======================
 
     if (sortOption === "price-asc") {
       result.sort((a, b) => a.price - b.price);
@@ -76,29 +120,104 @@ function ProductPage() {
     }
 
     setFilteredProducts(result);
-  }, [searchTerm, selectedCategory, sortOption, products]);
+  }, [products, searchTerm, selectedCategory, sortOption]);
 
-  const categories = ["All", ...new Set(products.map((p) => p.category))];
+  // ==========================
+  // EDIT PRODUCT
+  // ==========================
+  // Click nút Edit
+  // đưa product vào form
 
-  if (loading) return <h3>Loading...</h3>;
+  const handleEdit = (product) => {
+    setEditingProduct(product);
+  };
 
-  if (error) return <h3>{error}</h3>;
+  // ==========================
+  // DELETE PRODUCT
+  // ==========================
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Bạn có chắc muốn xóa sản phẩm này?");
+
+    // Nếu chọn Cancel
+    // không làm gì
+
+    if (!confirmDelete) return;
+
+    try {
+      // gọi API DELETE
+
+      await productsApi.delete(id);
+
+      // Load lại danh sách sau khi xóa
+
+      fetchProducts();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // ==========================
+  // CATEGORY LIST
+  // ==========================
+
+  const categories = [
+    "All",
+    ...new Set((products || []).map((p) => p.category)),
+  ];
+
+  // ==========================
+  // LOADING / ERROR
+  // ==========================
+
+  if (loading) return <h2>Loading...</h2>;
+
+  if (error) return <h2>{error}</h2>;
 
   return (
-    <div>
-      <h2>Product Catalog</h2>
+    <div
+      style={{
+        padding: "20px",
+      }}
+    >
+      <h1>Products</h1>
 
-      {/* FILTER BAR */}
+      {/* ==========================
+          PRODUCT FORM
+
+          - Không có editingProduct
+            => CREATE
+
+          - Có editingProduct
+            => UPDATE
+      ========================== */}
+
+      <ProductForm
+        onSuccess={fetchProducts}
+        editingProduct={editingProduct}
+        setEditingProduct={setEditingProduct}
+      />
+
+      <hr />
+
+      {/* ==========================
+          SEARCH FILTER SORT
+      ========================== */}
 
       <div
         style={{
           display: "flex",
+
           gap: "10px",
-          margin: "20px 0",
+
+          marginBottom: "20px",
+
+          marginTop: "20px",
         }}
       >
         <input
-          placeholder="Search product..."
+          type="text"
+          placeholder="Search..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -116,7 +235,7 @@ function ProductPage() {
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
         >
-          <option value="none">Sort none</option>
+          <option value="none">Sort</option>
 
           <option value="price-asc">Price Low → High</option>
 
@@ -132,7 +251,7 @@ function ProductPage() {
             setSortOption("none");
           }}
         >
-          Clear Filters
+          Clear
         </button>
       </div>
 
@@ -141,9 +260,16 @@ function ProductPage() {
         products
       </p>
 
+      {/* ==========================
+          PRODUCT LIST
+
+          truyền Edit/Delete xuống
+      ========================== */}
+
       <ProductList
         products={filteredProducts}
-        // onSelectProduct={onSelectProduct}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
     </div>
   );

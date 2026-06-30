@@ -7,6 +7,9 @@ import ProductPage from "./pages/ProductPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
+import UserPage from "./pages/UserPage";
+import UserDetail from "./pages/UserDetail";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -23,6 +26,24 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
 
         <Route path="/login" element={<LoginPage />} />
+
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <UserPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/users/:id"
+          element={
+            <ProtectedRoute>
+              <UserDetail />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="*"
